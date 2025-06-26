@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painel do Funcionário</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    #login, #dashboard {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      width: 360px;
+      max-width: 90%;
+      transition: transform 0.2s;
+    }
+    #login:hover, #dashboard:hover {
+      transform: translateY(-4px);
+    }
+    h2 {
+      margin-bottom: 16px;
+      font-size: 1.5rem;
+      color: #333;
+    }
+    label {
+      display: block;
+      margin-top: 12px;
+      font-weight: bold;
+      color: #555;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 4px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 20px;
+      background: #4169e1;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+    button:hover {
+      background: #365fbb;
+    }
+    .btn-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .btn-grid button {
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="login">
+    <h2>Login do Funcionário</h2>
+    <form id="loginForm">
+      <label for="user">Usuário</label>
+      <input type="text" id="user" name="user" required />
+      <label for="email">E-mail</label>
+      <input type="email" id="email" name="email" required />
+      <label for="captcha">Captcha</label>
+      <input type="text" id="captcha" name="captcha" required placeholder="Digite o código" />
+      <button type="submit">Entrar</button>
+    </form>
+  </div>
+
+  <div id="dashboard" style="display:none;">
+    <h2>Painel Central</h2>
+    <div class="btn-grid">
+      <button onclick="abrir('cadastro')">Cadastro</button>
+      <button onclick="abrir('agendamento')">Agendamento</button>
+      <button onclick="abrir('ficha')">Ficha Atendimento</button>
+      <button onclick="abrir('orcamento')">Orçamento</button>
+      <button onclick="abrir('aceite')">Aceite</button>
+      <button onclick="logout()">Sair</button>
+    </div>
+  </div>
+
+  <script>
+    // Se já estiver logado, mostra o dashboard direto
+    window.addEventListener('load', () => {
+      if (localStorage.getItem('loggedIn') === 'true') {
+        document.getElementById('login').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+      }
+    });
+
+    // Processo de login
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const user = this.user.value.trim();
+      const email = this.email.value.trim();
+      const captcha = this.captcha.value.trim();
+      if (!user || !email || !captcha) {
+        alert('Preencha todos os campos para continuar.');
+        return;
+      }
+      // TODO: integrar validação real de captcha
+      localStorage.setItem('loggedIn', 'true');
+      document.getElementById('login').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+    });
+
+    // Navegação
+    function abrir(flow) {
+      window.location.href = flow + '.html';
+    }
+
+    // Logout
+    function logout() {
+      localStorage.removeItem('loggedIn');
+      document.getElementById('dashboard').style.display = 'none';
+      document.getElementById('login').style.display = 'block';
+      document.getElementById('loginForm').reset();
+    }
+  </script>
+</body>
+</html>
